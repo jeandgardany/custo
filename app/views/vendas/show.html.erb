@@ -1,0 +1,35 @@
+<%- model_class = Venda -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:data) %>:</strong></dt>
+  <dd><%= @venda.data %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:valor_bruto) %>:</strong></dt>
+  <dd><%= valor_formatado(@venda.valor_bruto = (@venda.quantidade.compra.valor_total / @venda.quantidade.q_corte) + @venda.despesa.total) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:valor_venda) %>:</strong></dt>
+  <dd><%= valor_formatado(@venda.valor_venda) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:lucro) %>:</strong></dt>
+  <dd><%= valor_formatado(@venda.lucro = @venda.valor_venda - @venda.valor_bruto) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:despesa_id) %>:</strong></dt>
+  <dd><%= valor_formatado(@venda.despesa.total) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:quantidade_id)%>:</strong></dt>
+  <dd><%= @venda.quantidade.q_corte %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:produto_id) %>:</strong></dt>
+  <dd><%= @venda.produto.nome %></dd>
+  <dt><strong><%= "Modelo" %>:</strong></dt>
+  <dd><%= @venda.produto.modelo %></dd>
+  <dt><strong><%= "Tamanho" %>:</strong></dt>
+  <dd><%= @venda.produto.tamanho %></dd>
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              vendas_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_venda_path(@venda), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              venda_path(@venda),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>

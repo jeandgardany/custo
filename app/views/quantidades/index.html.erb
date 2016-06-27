@@ -1,0 +1,42 @@
+<%- model_class = Quantidade -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:q_corte) %></th>
+      <th><%= model_class.human_attribute_name(:rendimento) %></th>
+      <th><%= model_class.human_attribute_name(:compra_id) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @quantidades.each do |quantidade| %>
+      <tr>
+        <td><%= link_to quantidade.id, quantidade_path(quantidade) %></td>
+        <td><%= quantidade.q_corte %></td>
+        <td><%= quantidade.rendimento %></td>
+        <td><%= quantidade.compra_id %></td>
+        <td><%=l quantidade.created_at %></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      quantidade_path(quantidade), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_quantidade_path(quantidade), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      quantidade_path(quantidade),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_quantidade_path,
+            :class => 'btn btn-primary' %>

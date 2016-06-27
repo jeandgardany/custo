@@ -1,0 +1,64 @@
+<%= search_form_for @q do |f| %>
+
+  <!--# Search if the name field contains... -->
+  <%= f.label :produto_nome_cont, "Produto:" %>
+  <%= f.search_field :produto_nome_cont %>
+  <%= f.label :produto_modelo_cont, "Modelo:" %>
+  <%= f.search_field :produto_modelo_cont %>
+
+<%= f.submit %>
+<% end %>
+<%- model_class = Venda -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:data) %></th>
+      <th><%= model_class.human_attribute_name(:produto_id) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+      <th><%= "Modelo" %></th>
+      <th><%= "Tamanho" %></th>
+      <th><%= "Compra" %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+      <th><%= model_class.human_attribute_name(:quantidade_id) %></th>
+      <th><%= model_class.human_attribute_name(:valor_bruto) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+      <th><%= model_class.human_attribute_name(:valor_venda) %>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+      <th><%= model_class.human_attribute_name(:lucro) %>&nbsp;&nbsp;&nbsp;&nbsp;</th>
+      <th><%= model_class.human_attribute_name(:despesa_id) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @vendas.each do |venda| %>
+      <tr>
+        <td><%= link_to venda.id, venda_path(venda) %></td>
+        <td><%= venda.data %></td>
+        <td><%= venda.produto.nome %></td>
+        <td><%= venda.produto.modelo %></td>
+        <td><%= venda.produto.tamanho %></td>
+        <td><%= valor_formatado(venda.quantidade.compra.valor_total) %></td>
+        <td><%= venda.quantidade.q_corte %></td>
+        <td><%= valor_formatado(venda.valor_bruto = (venda.quantidade.compra.valor_total / venda.quantidade.q_corte) + venda.despesa.total) %></td>
+        <td><%= valor_formatado(venda.valor_venda) %></td>
+        <td><%= valor_formatado(venda.lucro = venda.valor_venda - venda.valor_bruto) %></td>
+        <td><%= valor_formatado(venda.despesa.total) %></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      venda_path(venda), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_venda_path(venda), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      venda_path(venda),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_venda_path,
+            :class => 'btn btn-primary' %>

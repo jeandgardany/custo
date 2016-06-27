@@ -1,0 +1,31 @@
+<%- model_class = Quantidade -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:q_corte) %>:</strong></dt>
+  <dd><%= @quantidade.q_corte %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:rendimento) %>:</strong></dt>
+  <dd><%= @quantidade.rendimento = (@quantidade.q_corte / @quantidade.compra.peso_total) + @quantidade.produto.despesa.valor_total %></dd>
+  <dt><strong><%= "Custo" %>:</strong></dt>
+  <dd><%= custo = valor_formatado(@quantidade.compra.valor_total / @quantidade.q_corte) %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:compra_id) %>:</strong></dt>
+  <dd><%= valor_formatado(@quantidade.compra.valor_total) %></dd>
+  <dt><strong><%= "Tecido:" %>:</strong></dt>
+  <dd><%= @quantidade.compra.tecido.nome %></dd>
+  <dt><strong><%= "Produtos:" %></strong></dt><br>
+  <% @quantidade.produtos.each do |pro| %>
+  <p><li><%= "Nome: #{pro.nome} - Modelo: #{pro.modelo}" %></li></p>
+  <% end %>  
+</dl>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              quantidades_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_quantidade_path(@quantidade), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              quantidade_path(@quantidade),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
