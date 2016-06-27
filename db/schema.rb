@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160616200632) do
+ActiveRecord::Schema.define(version: 20160627190742) do
 
   create_table "compras", force: :cascade do |t|
     t.date     "data"
@@ -26,6 +26,21 @@ ActiveRecord::Schema.define(version: 20160616200632) do
 
   add_index "compras", ["fornecedor_id"], name: "index_compras_on_fornecedor_id", using: :btree
   add_index "compras", ["tecido_id"], name: "index_compras_on_tecido_id", using: :btree
+
+  create_table "costureiras", force: :cascade do |t|
+    t.date     "data"
+    t.string   "nome",          limit: 255
+    t.decimal  "valor_pago",                  precision: 10
+    t.integer  "q_produto",     limit: 4
+    t.text     "obs",           limit: 65535
+    t.integer  "produto_id",    limit: 4
+    t.integer  "quantidade_id", limit: 4
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+  end
+
+  add_index "costureiras", ["produto_id"], name: "index_costureiras_on_produto_id", using: :btree
+  add_index "costureiras", ["quantidade_id"], name: "index_costureiras_on_quantidade_id", using: :btree
 
   create_table "despesas", force: :cascade do |t|
     t.decimal  "total",                precision: 5, scale: 2, default: 0.0
@@ -98,6 +113,8 @@ ActiveRecord::Schema.define(version: 20160616200632) do
 
   add_foreign_key "compras", "fornecedors"
   add_foreign_key "compras", "tecidos"
+  add_foreign_key "costureiras", "produtos"
+  add_foreign_key "costureiras", "quantidades"
   add_foreign_key "despesas", "produtos"
   add_foreign_key "quantidades", "compras"
   add_foreign_key "vendas", "despesas"
