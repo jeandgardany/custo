@@ -4,7 +4,9 @@ class ProdutosController < ApplicationController
   # GET /produtos
   # GET /produtos.json
   def index
-    @produtos = Produto.all
+    @q = Produto.ransack(params[:q].try(:merge, m: 'or' ))
+    @produtos = @q.result(distinct: true)
+    #@produtos = Produto.all
   end
 
   # GET /produtos/1
